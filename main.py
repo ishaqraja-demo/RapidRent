@@ -65,19 +65,58 @@ def calc_break_even_occupancy(nightlyrate, electricity,gas,water,wifi,insurance,
     return total_wo_cleaning / formula
 
 
-monthlyrent = float(input("Monthly Rent (£):"))
-nightlyrate = float(input("Nightly Airbnb rate (£): "))
-occupancyrate = float(input("Expected occupancy (%): ")) / 100
+def get_positive_number(prompt):
+    flag = False
+    while flag == False:
+        try:
+            number = float(input(prompt))
+        except ValueError:
+            print("Please enter a number.")
+            continue
+        if number <= 0:
+            print("Invalid")
+        else:
+            flag = True
+    return number
 
-electricity = float(input("Monthly electricity (£): "))
-gas = float(input("Monthly gas (£): "))
-water = float(input("Monthly water (£): "))
-wifi = float(input("Monthly Wi-Fi (£): "))
-insurance = float(input("Monthly insurance (£): "))
-other = float(input("Other monthly costs (£): "))
 
-avgstay = float(input("Average guest stay (nights): "))
-cleaningcost = float(input("Cleaning cost per booking (£): "))
+monthlyrent = get_positive_number("Monthly Rent (£): ")
+nightlyrate = get_positive_number("Nightly Airbnb rate (£): ")
+
+flag = False
+while flag == False:
+
+
+    try:
+        occupancyrate = float(input("Expected occupancy (%): "))
+    except ValueError:
+        print("Please enter a number.")
+        continue
+
+    if occupancyrate < 0 or occupancyrate > 100:
+        print("Rate invalid. Enter something between 0-100.")
+        flag = False
+    else:
+        occupancyrate = occupancyrate/100
+        flag = True
+
+electricity = get_positive_number("Monthly electricity (£): ")
+gas = get_positive_number("Monthly gas (£): ")
+water = get_positive_number("Monthly water (£): ")
+wifi = get_positive_number("Monthly Wi-Fi (£): ")
+insurance = get_positive_number("Monthly insurance (£): ")
+other = get_positive_number("Other monthly costs (£): ")
+avgstay = get_positive_number("Average guest stay (nights): ")
+cleaningcost = get_positive_number("Cleaning cost per booking (£): ")
+
+print('\n')
+print('\n')
+print("=" * 40)
+print("     AIRBNB ARBITRAGE CALCULATOR")
+print("=" * 40)
+print('\n')
+print("RESULTS")
+print("-" * 40)
 
 annual_revenue = calc_revenue(nightlyrate, occupancyrate)
 print(f"Annual Revenue: £{annual_revenue:.2f}")
@@ -93,4 +132,6 @@ print(f"Monthly Profit: £{monthlyprofit:.2f}")
 
 break_even = calc_break_even_occupancy(nightlyrate, electricity, gas, water, wifi, insurance, other, avgstay, cleaningcost, monthlyrent)
 print(f"Break Even Occupancy Rate: {break_even:.2%}")
+
+
 
